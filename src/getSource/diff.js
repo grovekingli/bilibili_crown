@@ -3,7 +3,7 @@
  */
 
 const diff = (videoInfoArr, type) => {
-  if (!Array.isArray(videoInfoArr)) throw new TypeError('headers must be a array!');
+  if (!Array.isArray(videoInfoArr)) throw new TypeError('videoInfoArr must be a array!');
   if (videoInfoArr.length < 2) throw new TypeError('headers length must longer than 2!');
 
   type = type ? type : 'diffByName'
