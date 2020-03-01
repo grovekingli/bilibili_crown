@@ -1,7 +1,6 @@
 /**
  * Module dependencies
  */
-const path = require('path');
 const DownloadManger = require('./manager')
 
 

@@ -1,7 +1,6 @@
 /**
  * Module dependencies
  */
-const path = require('path');
 const puppeteer = require('puppeteer-core');
 const config = require('../../crown_config');
 const pathHandler = require('./pathHandler');
@@ -10,8 +9,8 @@ const pathHandler = require('./pathHandler');
 const chromePath = config.chromePath;
 
 
-// 有头无头模式
-const IS_HEADLESS = false;
+// 有头/无头模式
+const IS_HEADLESS = true;
 
 const getHeaders = (vPath) => {
   if (typeof vPath !== 'string') throw new TypeError('vPath must be a string!');

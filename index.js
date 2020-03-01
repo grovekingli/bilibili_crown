@@ -13,21 +13,22 @@ class BCrown extends PubSub {
 
   /**
    * 初始化'视频资源爬虫'类
-   * @param {String} [path] 指定输出文件的目录
+   * @param {string} path 指定输出文件的目录
+   * @param {Boolean} needMix 是否需要混流
    */
   constructor(path) {
     if (typeof path !== 'string') throw new TypeError('path must be a string!');
 
     super();
-    // this.path = path ? path : path.join(__dirname, '../download');;
     this.path = path;
+    this.needMix = needMix ? needMix : false;
     this.progress = 'created';
   }
 
   /**
    * fetch 获取视频 对全局的一个封装 
-   * @param {String} [av] 需要下载的视频
-   * @param {String} [name] 指定视频文件名,default: 视频av号+时间戳
+   * @param {String} av 需要下载的视频
+   * @param {String} [name] 指定视频文件名
    * @param {String} [type] 视频类型,default：MP4
    */
   fetch(avUrl, name, type) {
@@ -36,12 +37,10 @@ class BCrown extends PubSub {
     // if (typeof type !== 'string') throw new TypeError('type must be a string!');
     // type = type ? type : 'mp4';
     type = 'mp4'
-    name = name ? name.toString() : 'v' + '_' + Date.now();
+    this.name = name ? name.toString() : 'v' + '_' + Date.now();
     this.avUrl = avUrl;
 
     this.fetchVideo();
-
-    // return this;
   }
 
   async fetchVideo() {
@@ -67,20 +66,9 @@ class BCrown extends PubSub {
     this.progress = 'startFalsify';
     this.curryingEmit();
 
-    let req = '';
-    let url = '';
-    let success = false;
-
-    let callback = () => {
-      req = 'fake req';
-      url = 'http://fake.url';
-      success = true;
-      this.progress = 'falsified';
-    };
-
     return new Promise((resolve, reject) => {
       getSource(avUrl).then(res => {
-        callback();
+        this.progress = 'falsified';
         this.curryingEmit(res);
         resolve(res);
       }, err => {
@@ -97,9 +85,8 @@ class BCrown extends PubSub {
 
     let downloaderManager = download(videoInfoArr, this.path);
     let tasks = downloaderManager.tasks;
-    tasks.forEach((task,i)=>{
-      task.listen('file_start',(...args)=>{
-        console.log('已找到视频文件');
+    tasks.forEach((task, i) => {
+      task.listen('file_start', (...args) => {
         console.log(...args);
       });
     })
