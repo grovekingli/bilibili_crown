@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-const PubSub = require('../../pubsub');
+const PubSub = require('../../utlis/pubSub');
 const request = require('request');
 const path = require('path');
 const fs = require('fs');
@@ -60,13 +60,16 @@ class Downloader extends PubSub {
     }).on('response', (res, err) => {
       if (err) {
         this.emit('error', err);
-        return console.error(err)
+        console.error(err)
+        // return console.error(err)
       };
       let size = 0;
       try{
         size = Number(res.headers['content-range'].split('/')[1]);
       }catch(e){
-        return console.error(e)
+        this.emit('error', err);
+        console.error('header not match!')
+        // return console.error('header not match!')
       }
       const SINGLE = 1024 * 1000;
       const file = `${filePath}/${name}.mp4`;
@@ -77,7 +80,7 @@ class Downloader extends PubSub {
         fs.closeSync(fs.openSync(file, 'w'));
       } catch (err) {
         this.emit('error', err);
-        return console.error(err);
+        // return console.error(err);
       }
       this.emit('file_start', name, file, length);
       //console.log(`已找到视频文件${name}，分${length}片下载`);

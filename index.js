@@ -1,7 +1,7 @@
 /**
  * Module dependencies
  */
-const PubSub = require('./pubsub');
+const PubSub = require('./utlis/pubSub');
 const getSource = require('./src/getSource');
 const download = require('./src/download');
 const path = require('path');
@@ -16,7 +16,7 @@ class BCrown extends PubSub {
    * @param {string} path 指定输出文件的目录
    * @param {Boolean} needMix 是否需要混流
    */
-  constructor(path) {
+  constructor(path,needMix) {
     if (typeof path !== 'string') throw new TypeError('path must be a string!');
 
     super();
@@ -41,6 +41,9 @@ class BCrown extends PubSub {
     this.avUrl = avUrl;
 
     this.fetchVideo();
+    this.listen('error',(e)=>{
+      return false
+    })
   }
 
   async fetchVideo() {
@@ -51,7 +54,6 @@ class BCrown extends PubSub {
       let resObj = await this.mix(fileObj.video, fileObj.sound);
       this.onFinish({ ...resObj });
     } catch (e) {
-      console.log(e)
       this.onError(e)
     }
   }
@@ -80,19 +82,23 @@ class BCrown extends PubSub {
 
   // 下载
   download(videoInfoArr) {
+    // 进入 "开始下载" 状态
     this.progress = 'startDownload';
     this.curryingEmit();
 
     let downloaderManager = download(videoInfoArr, this.path);
     let tasks = downloaderManager.tasks;
+    // 进入 "下载任务已挂载" 状态
+    this.progress = 'downloadTaskMounted';
+    this.curryingEmit(tasks.length,tasks);
     tasks.forEach((task, i) => {
       task.listen('file_start', (...args) => {
-        console.log(...args);
       });
     })
 
     return new Promise((resolve, reject) => {
       downloaderManager.listen('all_file_finished', (...args) => {
+        // 进入 "下载任务已完成" 状态
         this.progress = 'downloaded';
         this.curryingEmit(...args);
       })
