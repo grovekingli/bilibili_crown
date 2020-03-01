@@ -6,7 +6,7 @@ const getSource = require('./src/getSource');
 const download = require('./src/download');
 const path = require('path');
 
-class BCrown extends PubSub{
+class BCrown extends PubSub {
   /**
    * '视频资源爬虫'类
    */
@@ -44,16 +44,16 @@ class BCrown extends PubSub{
     // return this;
   }
 
-  async fetchVideo(){
-    try{
+  async fetchVideo() {
+    try {
       this.onsStart()
       let reqObj = await this.fetchReq(this.avUrl);
       let fileObj = await this.download(reqObj);
-      let resObj = await this.mix(fileObj.video,fileObj.sound);
-      this.onFinish({...resObj});
-    }catch(e){
+      let resObj = await this.mix(fileObj.video, fileObj.sound);
+      this.onFinish({ ...resObj });
+    } catch (e) {
       console.log(e)
-      this.onerror(e)
+      this.onError(e)
     }
   }
 
@@ -62,7 +62,7 @@ class BCrown extends PubSub{
    */
 
   // 获得请求头
-  fetchReq(avUrl){
+  fetchReq(avUrl) {
     if (typeof avUrl !== 'string') throw new TypeError('avUrl must be a string!');
     this.progress = 'startFalsify';
     this.curryingEmit();
@@ -71,71 +71,67 @@ class BCrown extends PubSub{
     let url = '';
     let success = false;
 
-    let callback = ()=>{
+    let callback = () => {
       req = 'fake req';
       url = 'http://fake.url';
       success = true;
       this.progress = 'falsified';
     };
 
-    return new Promise((resolve,reject)=>{
-      getSource(avUrl).then(res=>{
+    return new Promise((resolve, reject) => {
+      getSource(avUrl).then(res => {
         callback();
         this.curryingEmit(res);
         resolve(res);
-      },err=>{
-        this.onerror(err);
+      }, err => {
+        this.onError(err);
+        reject(err)
       });
     });
   }
-  
+
   // 下载
-  download(videoInfoArr){
+  download(videoInfoArr) {
     this.progress = 'startDownload';
     this.curryingEmit();
 
-    let video = '';
-    let sound = '';
-    let success = false;
-    
-    download(videoInfoArr,this.path);
+    let downloaderManager = download(videoInfoArr, this.path);
+    let tasks = downloaderManager.tasks;
+    tasks.forEach((task,i)=>{
+      task.listen('file_start',(...args)=>{
+        console.log('已找到视频文件');
+        console.log(...args);
+      });
+    })
 
-    let callback = ()=>{
-      video = 'dir/dir/video.mp4';
-      sound = 'dir/dir/sound.mp3';
-      success = true;
-      this.progress = 'downloaded';
-      this.curryingEmit(video,sound,success);
-    };
-
-    return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
-        callback();
-        resolve({video,sound,success});
-      },500)
+    return new Promise((resolve, reject) => {
+      downloaderManager.listen('all_file_finished', (...args) => {
+        this.progress = 'downloaded';
+        this.curryingEmit(...args);
+      })
     });
   }
 
   // 混流
-  mix(video,sound){
+  mix(video, sound) {
     this.progress = 'startMix';
     this.curryingEmit();
 
     let resFile = '';
     let success = false;
 
-    let callback = ()=>{
+    let callback = () => {
       success = true;
       resFile = 'asdasd/asdad/file.mp4'
       this.progress = 'mixed';
-      this.curryingEmit(resFile,success);
+      this.curryingEmit(resFile, success);
     };
 
-    return new Promise((resolve,reject)=>{
-      setTimeout(()=>{
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
         callback();
-        resolve({resFile,success});
-      },500)
+        resolve({ resFile, success });
+      }, 500)
     });
   }
 
@@ -143,33 +139,33 @@ class BCrown extends PubSub{
    * 业务逻辑
    */
   // 请求
-  req(){
+  req() {
 
   }
 
   //区分视频文件还是音频文件
-  diff(){
+  diff() {
 
   }
 
-  curryingEmit(...args){
+  curryingEmit(...args) {
     let eventType = this.progress;
     if (this.handles.hasOwnProperty(eventType)) {
-      this.emit(this.progress,this.progress,...args);
+      this.emit(this.progress, this.progress, ...args);
     }
   };
 
-  onsStart(...args){
+  onsStart(...args) {
     this.progress = 'start';
     this.curryingEmit(...args);
   }
 
-  onFinish(...args){
+  onFinish(...args) {
     this.progress = 'finished';
     this.curryingEmit(...args);
   }
 
-  onerror(err) {
+  onError(err) {
     this.progress = 'error'
     this.curryingEmit(err);
   }

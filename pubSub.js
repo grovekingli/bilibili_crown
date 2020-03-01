@@ -36,9 +36,10 @@ class PubSub {
       this.handles[eventType].forEach(item => {
         item.apply(null, args);
       });
-    } else {
-      throw new Error(`"${eventType}"unregistered`);
-    }
+    } 
+    // else {
+    //   throw new Error(`${eventType}unregistered`);
+    // }
 
     return this;
   };

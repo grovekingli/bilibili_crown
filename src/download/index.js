@@ -1,24 +1,23 @@
 /**
  * Module dependencies
  */
-const getSize = require('./getSize');
-const downloadOne = require('./download')
-const downloadAll = require('./downloadAll')
 const path = require('path');
+const DownloadManger = require('./manager')
 
 
-module.exports = (videoInfoArr,filePath)=>{
+module.exports = (videoInfoArr, filePath) => {
   if (!Array.isArray(videoInfoArr)) throw new TypeError('videoInfoArr must be a array!');
   if (typeof filePath !== 'string') throw new TypeError('av must be a string!');
   let downloadArr = [];
-  videoInfoArr.forEach(videoInfo=>{
-    let size = getSize(videoInfo.header);
+  videoInfoArr.forEach(videoInfo => {
     downloadArr.push({
-      name:videoInfo.name,
-      url:videoInfo.url,
+      name: videoInfo.name,
+      url: videoInfo.url,
       filePath,
-      size
     });
   });
-  downloadAll(downloadArr)
+  // downloadAll(downloadArr)
+
+  let downloadManger = new DownloadManger(downloadArr,filePath);
+  return downloadManger.downloadAll();
 }

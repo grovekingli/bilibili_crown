@@ -2,6 +2,11 @@
  * Module dependencies
  */
 
+ /**
+  * 区分不同的请求头 (方法暂时被弃用)
+  * @param {Array} videoInfoArr 被区分的请求头数组
+  * @param {string} [type] 区分的依据
+  */
 const diff = (videoInfoArr, type) => {
   if (!Array.isArray(videoInfoArr)) throw new TypeError('videoInfoArr must be a array!');
   if (videoInfoArr.length < 2) throw new TypeError('headers length must longer than 2!');

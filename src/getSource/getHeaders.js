@@ -32,27 +32,41 @@ const req = async (url, onSuccess, onError) => {
     const page = await browser.newPage();
     let headerArr = [];
     let headerObj = {};
+    let canClose = false;
+    await page.setRequestInterception(true);
 
-    page.on('response', response => {
-      let reqUrl = response.url(); 
-      let header = response.headers();
-      if (header.hasOwnProperty('content-range')) {
+    page.on('request', request => {
+      request.continue();
+      let reqUrl = request.url();
+      let header = request.headers();
+      if (header.hasOwnProperty('range')) {
 
         let avName = pathHandler(reqUrl);
-        if(!headerObj.hasOwnProperty(avName)&&avName){
+        if (!headerObj.hasOwnProperty(avName) && avName) {
           headerObj[avName] = true;
+          console.log(header)
           headerArr.push({
-            name:avName,
+            name: avName,
             url: reqUrl,
-            header:JSON.parse(JSON.stringify(header)),
+            header: JSON.parse(JSON.stringify(header)),
           });
+          if (headerArr.length > 1) {
+            canClose = true;
+          }
         }
       }
     });
 
     await page.goto(url);
-    await page.waitFor(5000);
+
+    let videoBtn = await page.$('video');
+    await page.click('video');
+
+    await page.waitForFunction((flag) => {
+      return flag
+    }, { timeout: 10000 }, canClose);
     await browser.close();
+    console.log(headerArr)
     onSuccess(headerArr);
   } catch (e) {
     onError(e)

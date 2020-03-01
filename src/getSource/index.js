@@ -2,8 +2,6 @@
  * Module dependencies
  */
 const getHeaders = require('./getHeaders');
-const diff = require('./diff');
-const hack = require('./hack');
 const PubSub = require('../../pubSub')
 
 const getSource = (path) => {
@@ -12,16 +10,10 @@ const getSource = (path) => {
     getHeaders(path).then(
       res => {
         if(!res||!res.length){
-          console.log('header not enough')
-          console.log(res)
           reject('header not enough')
-        }else if(res.length===1){
-          res = hack(res);
-          console.log(res)
         }
-        let videoInfoArr = diff(res);
-        // let fileHeadersObj = diff(headers);
-        // console.log(fileHeadersObj)
+
+        videoInfoArr = res;
         resolve(videoInfoArr);
       },
       err => {
