@@ -44,7 +44,7 @@ bCrown
   .listen('error', (status, e) => {
     onError(e)
   });
-// bCrown.fetch('https://www.bilibili.com/video/av91996500')
+// bCrown.fetch('https://www.bilibili.com/video/BV14z411B7pB')
 
 module.exports = {
   bcrownGet(avNo) {

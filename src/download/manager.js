@@ -44,14 +44,15 @@ class Downloader extends PubSub {
       'Accept-Encoding': 'identity',
       'Accept-Language': 'zh-CN,zh;q=0.9',
       'Connection': ' keep-alive',
-      'Host': 'upos-hz-mirrorks3u.acgvideo.com',
+      'Host': 'upos-sz-mirrorcos.bilivideo.com',
       'Origin': 'https://www.bilibili.com',
-      'Referer': 'https://www.bilibili.com/video/av20391272',
+      'Referer': 'https://www.bilibili.com/video/BV1NV411Z7S1',
       'Sec-Fetch-Dest': 'empty',
       'Sec-Fetch-Mode': 'cors',
       'Sec-Fetch-Site': 'cross-site',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36'
     };
+    console.log(headers)
 
     request({
       method: 'GET',

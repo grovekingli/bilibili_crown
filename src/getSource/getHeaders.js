@@ -10,7 +10,7 @@ const chromePath = config.chromePath;
 
 
 // 有头/无头模式
-const IS_HEADLESS = true;
+const IS_HEADLESS = false;
 
 /**
  * 获取视频资源的请求头信息
@@ -46,6 +46,7 @@ const req = async (link, onSuccess, onError) => {
       request.continue();
       let reqUrl = request.url();
       let header = request.headers();
+      //console.log(header);
       if (header.hasOwnProperty('range')) {
 
         let avName = pathHandler(reqUrl);
