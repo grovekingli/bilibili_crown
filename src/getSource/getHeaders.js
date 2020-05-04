@@ -10,7 +10,7 @@ const chromePath = config.chromePath;
 
 
 // 有头/无头模式
-const IS_HEADLESS = false;
+const IS_HEADLESS = true;
 
 /**
  * 获取视频资源的请求头信息

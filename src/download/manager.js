@@ -74,7 +74,12 @@ class Downloader extends PubSub {
       }
       const SINGLE = 1024 * 1000;
       const file = `${filePath}/${name}.mp4`;
-      const length = parseInt(size / SINGLE);
+      let length = size / SINGLE;
+      if(0<length&&length<1){
+        length = 1;
+      }else{
+        length = parseInt(length)
+      }
       let finishNum = 0;
 
       try {

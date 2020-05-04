@@ -44,11 +44,11 @@ bCrown
   .listen('error', (status, e) => {
     onError(e)
   });
-// bCrown.fetch('https://www.bilibili.com/video/BV14z411B7pB')
+bCrown.fetch('https://www.bilibili.com/video/BV1j4411W7F7');
 
-module.exports = {
-  bcrownGet(avNo) {
-    if (typeof avNo !== 'string') throw new TypeError('avNo must be a string!');
-    bCrown.fetch(`https://www.bilibili.com/video/${avNo}`);
-  }
-}
+// module.exports = {
+//   bcrownGet(avNo) {
+//     if (typeof avNo !== 'string') throw new TypeError('avNo must be a string!');
+//     bCrown.fetch(`https://www.bilibili.com/video/${avNo}`);
+//   }
+// };
