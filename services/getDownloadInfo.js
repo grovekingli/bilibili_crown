@@ -39,7 +39,7 @@ class SuperBCrown extends BCrown{
                   // console.log(`下载地址:${file}`);
                 })
                 .listen('p_start', (name, i, file, length) => {
-                  // console.log(`视频文件${name}第${i+1}片(total:${length})开始下载`);
+                  console.log(`视频文件${name}第${i+1}片(total:${length})开始下载`);
                   // console.log(`下载地址:${file}`);
                 })
                 .listen('p_finished', (name, i, file, length) => {
@@ -63,16 +63,19 @@ class SuperBCrown extends BCrown{
           console.log('finished')
         })
         .listen('error', (status, e) => {
-          onError(e)
+          this._onProgressChange(-1);
+          onError(e);
         });
   }
 
-  _onProgressChange(){
+  _onProgressChange(flag){
     let videoName = this.videoName;
    if(this.progressChangeFn) {
-     this.progressChangeFn(videoName,this.progressVal);
+     if(flag&&flag<0){
+       this.progressChangeFn(videoName,this.progressVal,flag);
+     }
+     this.progressChangeFn(videoName,this.progressVal,1);
    }
-   console.log(videoName,this.progressVal);
   }
 
   listenProgress(callback){
@@ -99,9 +102,10 @@ module.exports=(ws, req)=>{
     });
     let videoUrl = `https://www.bilibili.com/video/${video}`;
     addSuperBCrown.fetch(videoUrl);
-    addSuperBCrown.listenProgress((video,val)=>{
+    addSuperBCrown.listenProgress((video,val,flag)=>{
       ws.send(JSON.stringify({
-        type:11,
+        type:flag>0?11:10,
+        flag,
         data:{
           user,
           video,

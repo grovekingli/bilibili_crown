@@ -48,7 +48,7 @@ const req = async (link, onSuccess, onError) => {
       let header = request.headers();
       //console.log(header);
       if (header.hasOwnProperty('range')) {
-
+        console.log(reqUrl,header)
         let avName = pathHandler(reqUrl);
         if (!headerObj.hasOwnProperty(avName) && avName) {
           headerObj[avName] = true;
