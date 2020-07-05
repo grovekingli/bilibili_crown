@@ -89,5 +89,6 @@ typings/
 
 # video
 download/
+!/download/placeholder.js
 video_assets/
 .idea/workspace.xml
