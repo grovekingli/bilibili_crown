@@ -1,61 +1,3 @@
-// const http = require('http');
-// io= require('socket.io');
-// const fs = require('fs')
-// const app = require('./app');
-// const getDownloadInfo = require('./services');
-//
-// console.log("server start! you can browse : http://localhost:2031")
-//
-// const server = http.createServer((req, res) => {
-//   let url = req.url;
-//   if (url === '/') {
-//     fs.readFile("./index.html", "utf-8", (err, data) => {
-//       if (err) {
-//         console.log("index.html loading is failed :" + err);
-//       }
-//       else {
-//         //返回index.html页面
-//         res.end(data);
-//       }
-//     });
-//   } else {
-//     if (/^\/bcrownGet/.test(url)) {
-//       let params = url.split('/');
-//       if (params && params[2]) {
-//         let avNo = params[2];
-//         console.log(avNo);
-//         app.bcrownGet(avNo);
-//         res.writeHead(200);
-//         res.write("start download")
-//       }
-//     } else {
-//       res.writeHead(404)
-//       res.write("404")
-//     }
-//     res.end();
-//   }
-// });
-//
-// server.listen(2031);
-// let wsServer = io.listen(server);
-//
-// wsServer.on('connection', sock=>{
-//   sock.on('aaa', function(a,b){         // name -> 'aaa' 要与前台的 name 保持一致
-//     console.log(a);
-//     console.log(b);
-//     console.log(arguments)
-//   });   // 'aaa'事件名与前台的一致
-//   sock.on('disconnect', function(a,b){         // name -> 'aaa' 要与前台的 name 保持一致
-//     console.log('disconnect');
-//   });
-//   sock.on('progress', function(a,b){         // name -> 'aaa' 要与前台的 name 保持一致
-//     console.log('connect');
-//   });
-//
-//   // setInterval(function(){
-//   //   sock.emit('bbb', '服务器发来的数据')  // name -> 'bbb' 要与前台的 name 保持一致
-//   // }, 2000)
-// });
 /**
  * moudules
  */
@@ -107,7 +49,6 @@ app.all('*', (req, res, next) => {
 /**
  * 获得代理ip的接口
  */
-// app.use(`/`, router)
 app.ws('/api/downloadInfo',getDownloadInfo);
 
 app.listen(PORT, () => {

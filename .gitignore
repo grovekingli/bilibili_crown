@@ -90,3 +90,4 @@ typings/
 # video
 download/
 video_assets/
+.idea/workspace.xml
