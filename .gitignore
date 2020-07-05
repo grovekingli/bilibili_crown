@@ -88,7 +88,7 @@ typings/
 .dynamodb/
 
 # video
-download/
-!/download/placeholder.js
+**/download/*
+!**/download/placeholder.js
 video_assets/
 .idea/workspace.xml
