@@ -7,12 +7,13 @@ const path = require('path');
 const express = require('express');
 const expressWs = require('express-ws');
 const bodyParser = require('body-parser');
-const getDownloadInfo = require('./services/getDownloadInfo')
+const getDownloadInfo = require('./services/getDownloadInfo');
+const config = require('./crown_config');
 
 /**
  * static value
  */
-const PORT = 2031;
+const PORT = config.serverPort;
 const app = express();
 expressWs(app);
 
