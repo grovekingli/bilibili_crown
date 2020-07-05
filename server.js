@@ -48,12 +48,22 @@ app.all('*', (req, res, next) => {
  * route
  */
 /**
- * 获得代理ip的接口
+ * 下载视频长连接接口
  */
 app.ws('/api/downloadInfo',getDownloadInfo);
+/**
+ * 本地下载视频接口 直接调用了该目录下的app.js文件来进行下载
+ */
+app.get('/api/bcrownGet',(req,res)=>{
+  let service = require('./app');
+
+  let video = req.query.video // 入参为'BVxxxxxxx'
+  service.bcrownGet(video)
+});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
+  console.log(`open browser and visit: localhost:2031 to test`);
 }).on('error', (err)=>{
   console.log('on error handler');
   console.log(err);

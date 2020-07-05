@@ -23,3 +23,4 @@ chrome默认路径为mac系统下的路径<br>
 ### 常见问题
 Q1: 请求头获取失败<br>
 A1: 如果遇到下载失败去改一下./src/download/manger.js 40行的header；一般要修改Host和Referer两个地方，因为这个东西，b站一直在变的<br>
+

@@ -24,7 +24,7 @@
     submitBtn.onclick = function(){
       var val = form["text"].value;
       var xhr = new XMLHttpRequest();
-      xhr.open('get',`/bcrownGet/${val}`,false);
+      xhr.open('get',`api/bcrownGet?video=${val}`,false);
       xhr.onreadystatechange = function(){
         if(xhr.readyState==4){
           console.log('正在下载')
