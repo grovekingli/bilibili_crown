@@ -14,20 +14,13 @@
   <script>
     var form = document.getElementById('form');
     var submitBtn = document.getElementById('submit');
-    console.log(submitBtn)
-    // form.onsubmit = function(){
-    //   return function(){
-    //     alert(form["text"].value)
-    //     return false
-    //   }
-    // }
     submitBtn.onclick = function(){
       var val = form["text"].value;
       var xhr = new XMLHttpRequest();
-      xhr.open('get',`api/bcrownGet?video=${val}`,false);
+      xhr.open('get','api/bcrownGet?video='+val,false);
       xhr.onreadystatechange = function(){
         if(xhr.readyState==4){
-          console.log('正在下载')
+          console.log('下载...')
         }
       }
       xhr.send();
